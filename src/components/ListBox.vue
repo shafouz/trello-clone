@@ -14,9 +14,11 @@
       @blur="toggleShow(); changeListTitle(list);"
       @keyup.enter="blurInput();"
     />
-    <div v-for="(item, index) in getBoxes" :key="index">
-      <TextBox :parent="list.id" :id="index" />
-    </div>
+    <draggable :list="getBoxes" group="boxes">
+      <div id="text-box-div" v-for="(item, index) in getBoxes" :key="index">
+        <TextBox :parent="list.id" :id="index"/>
+      </div>
+    </draggable>
     <button class="btn btn-outline-navy btn-sm" @click="addBox(list)">New box...</button>
     </div>
   </div>
@@ -25,11 +27,13 @@
 <script>
 import TextBox from "./TextBox.vue";
 import { mapMutations } from 'vuex';
+import draggable from 'vuedraggable';
 
 export default {
   name: "ListBox",
   components: {
     TextBox,
+    draggable
   },
   props: {
     id: Number
@@ -44,8 +48,13 @@ export default {
     this.list = this.$store.getters.getListById(this.id)
   },
   computed: {
-    getBoxes(){
-      return this.$store.getters.getListBoxById(this.id).length
+    getBoxes: {  
+      get() {
+        return this.$store.getters.getListBoxById(this.id)
+      },
+      set(value) {
+        this.$store.commit('updateList', value)
+      }
     }
   },
   methods: {
@@ -72,11 +81,14 @@ export default {
 #listbox {
   color: navy;
   margin: 0.3125em;
-  background-color: #ebecf0
 }
 
 strong {
   margin: 0.3125em 0.625em;
+}
+
+#text-box-div {
+  background-color: #ebecf0;
 }
 
 .btn.btn-outline-navy {

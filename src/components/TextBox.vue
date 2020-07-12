@@ -1,8 +1,8 @@
 <template>
   <div class="textbox">
-    <div id="box-title">
-      <p class="card-title" @click="toggleShow(); focusInput();" v-show="!showTitle">{{ box.title }}</p>
-      <input ref="title" v-show="showTitle" @blur="toggleShow(); changeBoxTitle(box)" @keyup.enter="blurInput();" v-model="box.title" />
+    <div id="box-title" @click="toggleShow(); focusInput();">
+      <p class="card-title" v-show="!showTitle">{{ box.title }}</p>
+      <input ref="title" v-show="showTitle" @blur="toggleShow(); changeBoxTitle(box);" @keyup.enter="blurInput();" v-model="box.title" />
     </div>
   </div>
 </template>
@@ -31,7 +31,8 @@ export default {
   },
   methods: {
     ...mapMutations([
-      'changeBoxTitle'
+      'changeBoxTitle',
+      'updateElements'
     ]),
     toggleShow(){
       this.showTitle = !this.showTitle
@@ -43,8 +44,8 @@ export default {
     },
     blurInput(){
       this.$refs.title.blur();
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -52,6 +53,7 @@ export default {
 .textbox {
   padding: 0.625em;
   margin-bottom: 0.625em;
+  background-color: #ebecf0;
 }
 
 .textbox div {
@@ -65,9 +67,9 @@ export default {
 #box-title {
   border: 0.0625em solid #dfdfdf;
   border-radius: 0.25em 0.25em 0.25em 0.25em;
-  height: 2.25em;
-  box-shadow: 0 0.0625em;
+  box-shadow: 0.0625em 0.0625em;
   background-color: white;
+  min-height: 36px;
 }
 
 #box-title:hover {

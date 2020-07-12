@@ -36,17 +36,14 @@ export default new Vuex.Store({
     addBox(state, { id }) {
       let index = state.lists.find((list) => list.id === id).box;
       if (index.length > 0) {
-        let lastId = state.lists.find((list) => list.id === id).box[
-          index.length - 1
-        ].id;
-        let parent = state.lists.find((list) => list.id === id).box[0].parent;
-        state.lists
-          .find((list) => list.id === id)
-          .box.push({
-            id: lastId + 1,
-            title: "Insira um título para este cartão...",
-            parent: parent,
-          });
+        let lastId = index[index.length - 1].id;
+        let parent = index[0].parent;
+        let box = {
+          id: lastId + 1,
+          title: "Insira um título para este cartão...",
+          parent: parent,
+        };
+        state.lists.find((list) => list.id === id).box.push(box);
       } else {
         state.lists[id].box.push({
           id: 0,
@@ -65,11 +62,12 @@ export default new Vuex.Store({
       };
       state.lists.push(list);
     },
+    // Drag and drop mutations
   },
   methods: {
     getBox: (state) => (id) => {
       return state.lists.find((list) => list.id === id).box;
     },
   },
-  plugins: [createPersistedState()],
+  plugins: [createPersistedState({ key: "trello" })],
 });
