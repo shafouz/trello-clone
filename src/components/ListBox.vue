@@ -1,5 +1,6 @@
 <template>
   <div id="listbox">
+    <!--
     <div class="card">
     <strong
       @click="toggleShow(); focusInput();"
@@ -13,20 +14,18 @@
       v-show="showTitle"
       @blur="toggleShow(); changeListTitle(list);"
       @keyup.enter="blurInput();"
-    />
-    <draggable :list="getBoxes" group="boxes">
-      <div id="text-box-div" v-for="(item, index) in getBoxes" :key="index">
-        <TextBox :parent="list.id" :id="index"/>
-      </div>
-    </draggable>
-    <button class="btn btn-outline-navy btn-sm" @click="addBox(list)">New box...</button>
-    </div>
+    />-->
+      <draggable v-model="lists" class="row" id="text-box-div">
+        <TextBox class="col-3" v-for="(value, index) in getLists" :title="value.title" :key="value.id" :index="index"></TextBox>
+      </draggable>
+    <!--<button class="btn btn-outline-navy btn-sm" @click="addBox(list)">New box...</button>-->
+    <!--</div>-->
   </div>
 </template>
 
 <script>
 import TextBox from "./TextBox.vue";
-import { mapMutations } from 'vuex';
+//import { mapMutations } from 'vuex';
 import draggable from 'vuedraggable';
 
 export default {
@@ -35,28 +34,20 @@ export default {
     TextBox,
     draggable
   },
-  props: {
-    id: Number
-  },
-  data: function() {
-    return {
-      list: {id: this.id, title: "", box: []},
-      showTitle: false
-    };
-  },
-  mounted() {
-    this.list = this.$store.getters.getListById(this.id)
-  },
   computed: {
-    getBoxes: {  
-      get() {
-        return this.$store.getters.getListBoxById(this.id)
+    getLists() {
+      return this.$store.state.lists;
+    },
+    lists: {
+      get(){
+        return this.$store.state.lists;
       },
-      set(value) {
-        this.$store.commit('updateList', value)
-      }
-    }
+      set(value){
+        this.$store.commit('updateList', value);
+      },
+    },
   },
+  /*
   methods: {
     ...mapMutations([
       'changeListTitle',
@@ -74,6 +65,7 @@ export default {
       this.$refs.title.blur();
     },
   },
+  */
 }
 </script>
 
@@ -85,10 +77,6 @@ export default {
 
 strong {
   margin: 0.3125em 0.625em;
-}
-
-#text-box-div {
-  background-color: #ebecf0;
 }
 
 .btn.btn-outline-navy {

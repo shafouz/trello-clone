@@ -1,16 +1,16 @@
 <template>
   <div class="container" id="app ">
-    <Board />
+    <ListBox />
   </div>
 </template>
 
 <script>
-import Board from './components/Board.vue'
+import ListBox from './components/ListBox.vue'
 
 export default {
   name: 'App',
   components: {
-    Board
+    ListBox
   }
 }
 </script>

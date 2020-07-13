@@ -1,59 +1,64 @@
 <template>
   <div class="textbox">
-    <div id="box-title" @click="toggleShow(); focusInput();">
-      <p class="card-title" v-show="!showTitle">{{ box.title }}</p>
-      <input ref="title" v-show="showTitle" @blur="toggleShow(); changeBoxTitle(box);" @keyup.enter="blurInput();" v-model="box.title" />
-    </div>
+    <h3>{{ title }}</h3>
+    <draggable v-model="boxes" group="myBoxes">
+      <div v-for="(box,index) in boxes" :key="box.id">
+        <toggleTitle @update="updateBox(list, box.id, $event)" :index="index" :title="box.title"></toggleTitle>
+      </div>
+    </draggable>
+    <button @click="newBox">Nova caixa...</button>
   </div>
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
+import draggable from 'vuedraggable';
+import toggleTitle from './Title.vue';
 
 export default {
   name: "TextBox",
-  props: {
-    parent: Number,
-    id: Number
+  props: ['index', 'title'],
+  components: {
+    draggable,
+    toggleTitle
   },
-  data() {
+  data(){
     return {
-      box: {
-        id: this.id,
-        title: "",
-        parent: this.parent
-      },
-      showTitle: false
-    };
+      show: true,
+      list: this.index
+    }
   },
-  mounted() {
-    this.box = this.$store.getters.getBoxById(this.parent, this.id);
+  computed: {
+    boxes: {
+      get () {
+        return this.$store.state.lists[this.index].box;
+      },
+      set (value) {
+        this.$store.commit('updateBox', {
+          index: this.index,
+          value,
+        })
+      },
+    },
   },
   methods: {
-    ...mapMutations([
-      'changeBoxTitle',
-      'updateElements'
-    ]),
-    toggleShow(){
-      this.showTitle = !this.showTitle
+    newBox() {
+      this.$store.commit('addBox', {index: this.index});
     },
-    focusInput(){
-      setTimeout(() => {
-        this.$refs.title.focus();
-      }, 100);
-    },
-    blurInput(){
-      this.$refs.title.blur();
-    },
+    updateBox(index, id, value){
+      this.$store.commit('updateBoxTitle', {index: index, id: id, value: value})
+    }
   },
 };
 </script>
 
 <style>
 .textbox {
+  margin: 5px;
   padding: 0.625em;
   margin-bottom: 0.625em;
   background-color: #ebecf0;
+  border: 0.0625em solid #dfdfdf;
+  border-radius: 0.25em 0.25em 0.25em 0.25em;
 }
 
 .textbox div {
@@ -62,17 +67,5 @@ export default {
 
 .textbox p {
   margin: 0;
-}
-
-#box-title {
-  border: 0.0625em solid #dfdfdf;
-  border-radius: 0.25em 0.25em 0.25em 0.25em;
-  box-shadow: 0.0625em 0.0625em;
-  background-color: white;
-  min-height: 36px;
-}
-
-#box-title:hover {
-  background-color: #eaeaf3;
 }
 </style>

@@ -6,11 +6,26 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    lastListId: 1,
+    lastBoxId: 5,
     lists: [
       {
         id: 0,
-        title: "Testing",
-        box: [{ id: 0, title: "This is a Box", parent: 0 }],
+        title: "This is my first list",
+        box: [
+          { id: 0, title: "Joao" },
+          { id: 1, title: "Luca" },
+          { id: 2, title: "Macedo" },
+        ],
+      },
+      {
+        id: 1,
+        title: "This is my second list",
+        box: [
+          { id: 3, title: "oaoJ" },
+          { id: 4, title: "acuL" },
+          { id: 5, title: "odecaM" },
+        ],
       },
     ],
   },
@@ -30,26 +45,25 @@ export default new Vuex.Store({
       const index = state.lists.findIndex((item) => item.id === payload.id);
       if (index !== -1) state.lists.splice(index, 1, payload);
     },
-    changeBoxTitle(state, { id, title, parent }) {
-      Vue.set(state.lists[parent].box[id], "title", title);
+    changeBoxTitle(state, { id, title, index }) {
+      Vue.set(state.lists[index].box[id], "title", title);
     },
-    addBox(state, { id }) {
-      let index = state.lists.find((list) => list.id === id).box;
-      if (index.length > 0) {
-        let lastId = index[index.length - 1].id;
-        let parent = index[0].parent;
+    addBox(state, { index }) {
+      let arr = state.lists[index].box;
+      let id = state.lastBoxId;
+      if (arr.length > 0) {
+        state.lastBoxId++;
         let box = {
-          id: lastId + 1,
+          id: id + 1,
           title: "Insira um título para este cartão...",
-          parent: parent,
         };
-        state.lists.find((list) => list.id === id).box.push(box);
+        state.lists[index].box.push(box);
       } else {
-        state.lists[id].box.push({
-          id: 0,
+        state.lists[index].box.push({
+          id: id + 1,
           title: "Insira o título da lista...",
-          parent: id,
         });
+        state.lastBoxId++;
       }
     },
     addList(state) {
@@ -63,6 +77,15 @@ export default new Vuex.Store({
       state.lists.push(list);
     },
     // Drag and drop mutations
+    updateBoxTitle(state, { index, id, value }) {
+      Vue.set(state.lists[index].box[id], "title", value);
+    },
+    updateBox(state, { index, value }) {
+      state.lists[index].box = value;
+    },
+    updateList(state, payload) {
+      state.lists = payload;
+    },
   },
   methods: {
     getBox: (state) => (id) => {
