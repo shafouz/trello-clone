@@ -6,7 +6,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    lastListId: 1,
+    lastId: 1,
     lastBoxId: 5,
     lists: [
       {
@@ -41,44 +41,28 @@ export default new Vuex.Store({
     },
   },
   mutations: {
-    changeListTitle(state, payload) {
-      const index = state.lists.findIndex((item) => item.id === payload.id);
-      if (index !== -1) state.lists.splice(index, 1, payload);
-    },
-    changeBoxTitle(state, { id, title, index }) {
-      Vue.set(state.lists[index].box[id], "title", title);
-    },
-    addBox(state, { index }) {
-      let arr = state.lists[index].box;
-      let id = state.lastBoxId;
-      if (arr.length > 0) {
-        state.lastBoxId++;
-        let box = {
-          id: id + 1,
-          title: "Insira um título para este cartão...",
-        };
-        state.lists[index].box.push(box);
-      } else {
-        state.lists[index].box.push({
-          id: id + 1,
-          title: "Insira o título da lista...",
-        });
-        state.lastBoxId++;
-      }
-    },
-    addList(state) {
-      let lists = state.lists;
-      let lastID = lists[lists.length - 1].id;
-      let list = {
-        id: lastID + 1,
-        title: "Insira o título da lista...",
-        box: [],
-      };
-      state.lists.push(list);
-    },
     // Drag and drop mutations
-    updateBoxTitle(state, { index, id, value }) {
-      Vue.set(state.lists[index].box[id], "title", value);
+    addList(state) {
+      state.lists.push({
+        id: state.lastId + 1,
+        title: "Insira um titulo aqui...",
+        box: [{ title: "Insira um titulo aqui...", id: state.lastBoxId + 1 }],
+      });
+      state.lastBoxId++;
+      state.lastId++;
+    },
+    addBox(state, { list }) {
+      state.lists[list].box.push({
+        title: "Insira um titulo aqui...",
+        id: state.lastBoxId + 1,
+      });
+      state.lastBoxId++;
+    },
+    updateListTitle(state, { list, value }) {
+      Vue.set(state.lists[list], "title", value);
+    },
+    updateBoxTitle(state, { list, index, value }) {
+      Vue.set(state.lists[list].box[index], "title", value);
     },
     updateBox(state, { index, value }) {
       state.lists[index].box = value;

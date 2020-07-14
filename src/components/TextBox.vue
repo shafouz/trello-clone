@@ -1,30 +1,34 @@
 <template>
   <div class="textbox">
-    <h3>{{ title }}</h3>
+    <div>
+      <h3 @click="toggle(); focusInput();" v-show="isActive">{{ title }}</h3>
+      <input ref="title" v-show="!isActive" v-model="listTitle" @blur="toggle(); updateList(listTitle);" @keyup.enter="blurInput" />
+    </div>
     <draggable v-model="boxes" group="myBoxes">
-      <div v-for="(box,index) in boxes" :key="box.id">
-        <toggleTitle @update="updateBox(list, box.id, $event)" :index="index" :title="box.title"></toggleTitle>
+      <div v-for="(box, index) in boxes" :key="box.id">
+        <box-title :list="list" :index="index" :title="box.title"></box-title>
       </div>
     </draggable>
-    <button @click="newBox">Nova caixa...</button>
+    <button class="btn btn-outline-navy btn-sm" @click="newBox()">Nova caixa...</button>
   </div>
 </template>
 
 <script>
 import draggable from 'vuedraggable';
-import toggleTitle from './Title.vue';
+import boxTitle from './BoxTitle.vue';
 
 export default {
   name: "TextBox",
   props: ['index', 'title'],
   components: {
     draggable,
-    toggleTitle
+    boxTitle
   },
   data(){
     return {
-      show: true,
-      list: this.index
+      isActive: true,
+      list: this.index,
+      listTitle: "",
     }
   },
   computed: {
@@ -42,11 +46,23 @@ export default {
   },
   methods: {
     newBox() {
-      this.$store.commit('addBox', {index: this.index});
+      this.$store.commit('addBox', {list: this.index});
     },
-    updateBox(index, id, value){
-      this.$store.commit('updateBoxTitle', {index: index, id: id, value: value})
-    }
+    updateList(value){
+      this.$store.commit('updateListTitle', {list: this.index, value: value})
+    },
+    // events
+    toggle(){
+      this.isActive = !this.isActive;
+    },
+    focusInput(){
+      setTimeout(() => {
+        this.$refs.title.focus();
+      }, 100);
+    },
+    blurInput(){
+      this.$refs.title.blur();
+    },
   },
 };
 </script>

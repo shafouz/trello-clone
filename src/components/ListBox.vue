@@ -1,31 +1,14 @@
 <template>
   <div id="listbox">
-    <!--
-    <div class="card">
-    <strong
-      @click="toggleShow(); focusInput();"
-      v-show="!showTitle"
-    >
-      {{ list.title }}
-    </strong>
-    <input 
-      ref="title"
-      v-model="list.title"
-      v-show="showTitle"
-      @blur="toggleShow(); changeListTitle(list);"
-      @keyup.enter="blurInput();"
-    />-->
-      <draggable v-model="lists" class="row" id="text-box-div">
-        <TextBox class="col-3" v-for="(value, index) in getLists" :title="value.title" :key="value.id" :index="index"></TextBox>
-      </draggable>
-    <!--<button class="btn btn-outline-navy btn-sm" @click="addBox(list)">New box...</button>-->
-    <!--</div>-->
+    <draggable v-model="lists" class="row" id="text-box-div">
+      <TextBox class="col-3" v-for="(value, index) in getLists" :title="value.title" :key="value.id" :index="index"></TextBox>
+    </draggable>
+    <button class="btn btn-outline-navy" @click="newList">Nova lista...</button>
   </div>
 </template>
 
 <script>
 import TextBox from "./TextBox.vue";
-//import { mapMutations } from 'vuex';
 import draggable from 'vuedraggable';
 
 export default {
@@ -47,25 +30,11 @@ export default {
       },
     },
   },
-  /*
   methods: {
-    ...mapMutations([
-      'changeListTitle',
-      'addBox'
-    ]),
-    toggleShow(){
-      this.showTitle = !this.showTitle
-    },
-    focusInput(){
-      setTimeout(() => {
-        this.$refs.title.focus();
-      }, 100);
-    },
-    blurInput(){
-      this.$refs.title.blur();
-    },
-  },
-  */
+    newList(){
+      this.$store.commit('addList');
+    }
+  }
 }
 </script>
 

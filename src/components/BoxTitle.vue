@@ -1,14 +1,14 @@
 <template>
   <div id="title" @click="toggle(); focusInput();">
     <p v-show="isActive">{{ title }}</p>
-    <input v-model="boxtitle" ref="title" @blur="toggle(); emitter();" @keyup.enter="blurInput" v-show="!isActive" />
+    <input v-model="boxtitle" ref="title" @blur="toggle(); updateBox(list, index, boxtitle);" @keyup.enter="blurInput" v-show="!isActive" />
   </div>
 </template>
 
 <script>
 export default {
-  name: 'toggleTitle',
-  props: ['index', 'title'],
+  name: 'box-title',
+  props: ['list', 'index', 'title'],
   methods: {
     toggle(){
       this.isActive = !this.isActive;
@@ -21,14 +21,14 @@ export default {
     blurInput(){
       this.$refs.title.blur();
     },
-    emitter(){
-      this.$emit('update', this.boxtitle);
-    }
+    updateBox(list, index, value){
+      this.$store.commit('updateBoxTitle', {list: list, index: index, value: value})
+    },
   },
   data(){
     return {
       isActive: true,
-      boxtitle: ""
+      boxtitle: "",
     }
   },
 }
