@@ -1,7 +1,7 @@
 <template>
   <div id="listbox">
     <draggable v-model="lists" class="row" id="text-box-div">
-      <TextBox class="col-3" v-for="(value, index) in getLists" :title="value.title" :key="value.id" :index="index"></TextBox>
+      <TextBox class="col-md-3" v-for="(value, index) in lists" :title="value.title" :key="value.id" :boardId="boardId" :listId="index"></TextBox>
     </draggable>
     <button class="btn btn-outline-navy" @click="newList">Nova lista...</button>
   </div>
@@ -17,22 +17,24 @@ export default {
     TextBox,
     draggable
   },
+  data(){
+    return {
+      boardId: parseInt(this.$route.params.id),
+    }
+  },
   computed: {
-    getLists() {
-      return this.$store.state.lists;
-    },
     lists: {
       get(){
-        return this.$store.state.lists;
+        return this.$store.state.boards[this.boardId].lists;
       },
       set(value){
-        this.$store.commit('updateList', value);
+        this.$store.commit('updateList', {value: value, boardId: this.boardId});
       },
     },
   },
   methods: {
     newList(){
-      this.$store.commit('addList');
+      this.$store.commit('addList', {boardId: this.boardId});
     }
   }
 }
@@ -59,5 +61,15 @@ strong {
 .btn.btn-outline-navy:hover {
   color: navy;
   background-color: #eaeaf3;  
+}
+
+button.btn.btn-outline-navy.btn-sm {
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 12px;
+}
+
+.col-md-3 {
+  margin: 5px;
 }
 </style>

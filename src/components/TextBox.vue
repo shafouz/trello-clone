@@ -1,12 +1,12 @@
 <template>
   <div class="textbox">
-    <div>
-      <h3 @click="toggle(); focusInput();" v-show="isActive">{{ title }}</h3>
-      <input ref="title" v-show="!isActive" v-model="listTitle" @blur="toggle(); updateList(listTitle);" @keyup.enter="blurInput" />
+    <div class="ml-1">
+      <h3 class="list-title" @click="toggle(); focusInput();" v-show="isActive">{{ title }}</h3>
+      <textarea class="form-control" ref="title" v-show="!isActive" v-model="listTitle" @blur="toggle(); updateList(listTitle);" @keyup.enter="blurInput" />
     </div>
     <draggable v-model="boxes" group="myBoxes">
       <div v-for="(box, index) in boxes" :key="box.id">
-        <box-title :list="list" :index="index" :title="box.title"></box-title>
+        <box-title :boardId="boardId" :listId="listId" :boxId="index" :title="box.title"></box-title>
       </div>
     </draggable>
     <button class="btn btn-outline-navy btn-sm" @click="newBox()">Nova caixa...</button>
@@ -19,7 +19,7 @@ import boxTitle from './BoxTitle.vue';
 
 export default {
   name: "TextBox",
-  props: ['index', 'title'],
+  props: { boardId: Number, listId: Number, title: String },
   components: {
     draggable,
     boxTitle
@@ -27,18 +27,20 @@ export default {
   data(){
     return {
       isActive: true,
-      list: this.index,
       listTitle: "",
     }
   },
   computed: {
     boxes: {
       get () {
-        return this.$store.state.lists[this.index].box;
+        // this.$store.state.boards[boardId].lists[listId].box
+        return this.$store.state.boards[this.boardId].lists[this.listId].box;
       },
       set (value) {
         this.$store.commit('updateBox', {
-          index: this.index,
+          // listId: this.listId
+          boardId: this.boardId,
+          listId: this.listId,
           value,
         })
       },
@@ -46,10 +48,12 @@ export default {
   },
   methods: {
     newBox() {
-      this.$store.commit('addBox', {list: this.index});
+      // listId: this.listId
+      this.$store.commit('addBox', {boardId: this.boardId, listId: this.listId});
     },
     updateList(value){
-      this.$store.commit('updateListTitle', {list: this.index, value: value})
+      // listId: this.listId
+      this.$store.commit('updateListTitle', {boardId: this.boardId, listId: this.listId, value: value})
     },
     // events
     toggle(){
@@ -69,12 +73,12 @@ export default {
 
 <style>
 .textbox {
-  margin: 5px;
-  padding: 0.625em;
-  margin-bottom: 0.625em;
+  padding: 0.5em;
   background-color: #ebecf0;
   border: 0.0625em solid #dfdfdf;
   border-radius: 0.25em 0.25em 0.25em 0.25em;
+  max-width: 17em !important;
+  min-height: 32em;
 }
 
 .textbox div {
@@ -84,4 +88,8 @@ export default {
 .textbox p {
   margin: 0;
 }
+
+.list-title:hover {
+  cursor: pointer;
+} 
 </style>

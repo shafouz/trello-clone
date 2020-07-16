@@ -1,17 +1,14 @@
 import Vue from "vue";
-import store from "./store.js";
+import store from "./store";
 import mixin from "./components/mixins.js";
 import App from "./App.vue";
 import lodash from "lodash";
-import VueRouter from "vue-router";
+import router from "./router";
 import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 
 Vue.config.productionTip = false;
-
-// router
-Vue.use(VueRouter);
 
 // lodash
 Vue.prototype.$_ = lodash;
@@ -24,6 +21,7 @@ Vue.use(IconsPlugin);
 Vue.mixin(mixin);
 
 new Vue({
+  router,
   store,
   render: (h) => h(App),
 }).$mount("#app");

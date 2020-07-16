@@ -1,14 +1,14 @@
 <template>
   <div id="title" @click="toggle(); focusInput();">
-    <p v-show="isActive">{{ title }}</p>
-    <input v-model="boxtitle" ref="title" @blur="toggle(); updateBox(list, index, boxtitle);" @keyup.enter="blurInput" v-show="!isActive" />
+    <p id="box-title" v-show="isActive">{{ title }}</p>
+    <textarea class="form-control" v-model="boxtitle" ref="title" @blur="toggle(); updateBox(boxtitle);" @keyup.enter="blurInput" v-show="!isActive" />
   </div>
 </template>
 
 <script>
 export default {
   name: 'box-title',
-  props: ['list', 'index', 'title'],
+  props: { boardId: Number, listId: Number, boxId: Number, title: String },
   methods: {
     toggle(){
       this.isActive = !this.isActive;
@@ -21,8 +21,8 @@ export default {
     blurInput(){
       this.$refs.title.blur();
     },
-    updateBox(list, index, value){
-      this.$store.commit('updateBoxTitle', {list: list, index: index, value: value})
+    updateBox(value){
+      this.$store.commit('updateBoxTitle', {boardId: this.boardId, listId: this.listId, boxId: this.boxId, value: value})
     },
   },
   data(){
@@ -45,5 +45,6 @@ export default {
 
 #title:hover {
   background-color: #eaeaf3;
+  cursor: pointer;
 }
 </style>
