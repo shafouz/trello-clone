@@ -1,6 +1,6 @@
 <template>
-  <div id="title" @click="toggle(); focusInput();">
-    <p id="box-title" v-show="isActive">{{ title }}</p>
+  <div id="title" class="list-group-item-action" @click="toggle(); focusInput();">
+    <p v-show="isActive">{{ title }}</p>
     <textarea class="form-control" v-model="boxtitle" ref="title" @blur="toggle(); updateBox(boxtitle);" @keyup.enter="blurInput" v-show="!isActive" />
   </div>
 </template>

@@ -1,6 +1,5 @@
 import Vue from "vue";
 import store from "./store";
-import mixin from "./components/mixins.js";
 import App from "./App.vue";
 import lodash from "lodash";
 import router from "./router";
@@ -16,9 +15,6 @@ Vue.prototype.$_ = lodash;
 // bootstrap
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
-
-// mixin
-Vue.mixin(mixin);
 
 new Vue({
   router,

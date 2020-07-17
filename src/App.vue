@@ -1,8 +1,12 @@
 <template>
   <div id="app">
     <nav class="navbar navbar-light bg-light">
-      <router-link class="navbar-brand" to="/">Trello clone</router-link>
-      <button @click="newBoard" v-if="boardActive" class="btn btn-outline-navy">New Board</button>
+        <router-link class="navbar-brand" to="/">Trello clone</router-link>
+      <div>
+        <button @click="newBoard" v-if="boardActive" class="btn btn-outline-navy">New Board</button>
+        <button @click="resetBoard" v-if="boardActive" class="btn btn-outline-navy ml-2">Reset</button>
+        <button @click="resetList" v-if="!boardActive" class="btn btn-outline-navy">Reset List</button>
+      </div>
     </nav>
     <div class="container">
       <Board />
@@ -22,9 +26,15 @@ export default {
     }
   },
   methods: {
-    newBoard() {
+    newBoard(){
       this.$store.commit('addBoard');
     },
+    resetBoard(){
+      this.$store.commit('resetBoard');
+    },
+    resetList(){
+      this.$store.commit('resetList', {boardId: parseInt(this.$route.params.id)});
+    }
   }
 }
 </script>

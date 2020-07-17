@@ -1,24 +1,25 @@
-# lab
+# trello clone
 
-## Project setup
+## Install dependecies
 ```
 yarn install
 ```
 
-### Compiles and hot-reloads for development
+### Runs the project
 ```
 yarn serve
 ```
+server at localhost:8080
 
-### Compiles and minifies for production
-```
-yarn build
-```
+**Features**
 
-### Lints and fixes files
-```
-yarn lint
-```
+- Multiple Boards
+- Re-orderable lists and tasks
+- Quick editing of lists and tasks
+- Quick creation of lists and tasks
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+**Libraries and dependecies**
+- Vuex, vuedraggable, vuex-persistedstate
+- Jest for testing
+- Lodash
+- Bootstrap
