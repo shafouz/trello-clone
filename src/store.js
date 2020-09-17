@@ -118,18 +118,18 @@ export default new Vuex.Store({
             id: 0,
             title: "This is my first list",
             box: [
-              { id: 0, title: "Joao" },
-              { id: 1, title: "Luca" },
-              { id: 2, title: "Macedo" },
+              { id: 0, title: "..." },
+              { id: 1, title: "..." },
+              { id: 2, title: "..." },
             ],
           },
           {
             id: 1,
             title: "This is my second list",
             box: [
-              { id: 3, title: "oaoJ" },
-              { id: 4, title: "acuL" },
-              { id: 5, title: "odecaM" },
+              { id: 3, title: "..." },
+              { id: 4, title: "..." },
+              { id: 5, title: "The spice must flow" },
             ],
           },
         ],
@@ -141,9 +141,9 @@ export default new Vuex.Store({
             id: 2,
             title: "This is my third list",
             box: [
-              { id: 6, title: "anime" },
-              { id: 7, title: "poop" },
-              { id: 8, title: "lole" },
+              { id: 6, title: "New box 1" },
+              { id: 7, title: "New box 2" },
+              { id: 8, title: "" },
             ],
           },
           {
@@ -151,7 +151,7 @@ export default new Vuex.Store({
             title: "This is my fourth list",
             box: [
               { id: 9, title: "astartes" },
-              { id: 10, title: "wtf" },
+              { id: 10, title: "" },
               { id: 11, title: "we" },
             ],
           },
